@@ -15,7 +15,6 @@ build-parameters:
      commands:
       - npm install --production
       - npx -p @sap/cds-dk cds build --production
-
 modules:
  # --------------------- SERVER MODULE ------------------------
  - name: PescaraCalcio-srv
