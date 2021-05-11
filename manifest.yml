@@ -26,4 +26,4 @@ applications:
   instances: 1
   buildpack: nodejs_buildpack
   services:
-  - PescaraCalcio-db
+  - PescaraCalcio-db 
