@@ -12,9 +12,9 @@ entity Players : cuid {
     foot               : String;
 
     TrainingAssoc      : Association to many Trainings
-                             on TrainingAssoc.player.ID = ID;
+                             on TrainingAssoc.player = $self;
     PlayerSeasonsAssoc : Association to many PlayerSeasons
-                             on PlayerSeasonsAssoc.player.ID = ID;
+                             on PlayerSeasonsAssoc.player = $self;
 }
 
 entity Trainings : cuid {
@@ -24,7 +24,7 @@ entity Trainings : cuid {
     trainingType           : String;
 
     PhisicalConditionAssoc : Association to many PhisicalConditions
-                                 on PhisicalConditionAssoc.training.ID = ID;
+                                 on PhisicalConditionAssoc.training = $self;
 }
 
 entity PlayerSeasons : cuid {

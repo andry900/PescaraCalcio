@@ -8,3 +8,27 @@ Content-Type: application/json
 ###
 GET {{server}}/catalog/Players
 Content-Type: application/json
+
+###
+PATCH {{server}}/catalog/Players(532fb71f-ebe4-408d-92ec-f8d5588e4615)
+Content-Type: application/json
+
+{
+    "foot": "left"
+}
+
+###
+POST {{server}}/catalog/Players
+Content-Type: application/json
+
+###
+DELETE {{server}}/catalog/Players
+Content-Type: application/json
+
+###
+GET {{server}}/catalog/Trainings
+Content-Type: application/json
+
+###
+GET {{server}}/catalog/PlayerSeasons
+Content-Type: application/json
