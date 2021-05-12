@@ -41,7 +41,7 @@ entity PlayerSeasons : cuid {
 entity PhisicalConditions : cuid {
     training        : Association to Trainings;
     measurementTime : DateTime;
-    bloodPressure   : Integer;
+    bloodPressure   : String;
     bpm             : Integer;
     VO2max          : Integer;
     fatigue         : Integer;

@@ -1,0 +1,10 @@
+@server = http://localhost:4004
+
+POST {{server}}/catalog/sayhello
+Content-Type: application/json
+
+{"to" : "Andrea"}
+
+###
+GET {{server}}/catalog/Players
+Content-Type: application/json
