@@ -27,6 +27,22 @@ module.exports = cds.service.impl(async function () {
             each[j].cond = parseInt(result);
         }
     })
+    
+    this.on('calculateCondition', async function() {
+        //SELECT su Phisical condition
+        var ffResult = await SELECT.from('PhisicalConditions')
+        for(var i = 0; i< ffResult; i++){
+            var ffValue = 10;
+          await  UPDATE ('PhisicalConditions',PhisicalConditions[i].ID) .with ({
+   condition: ffValue
+})
+        }
+        //loop sui record
+            //calcolo forma fisica
+            //Update forma fisica
+        return 0;
+    })
+
 
     this.on('sayhello', function (req) {   //le azioni vengono lanciate in POST
         return "ciao " + req.data.to;

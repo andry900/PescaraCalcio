@@ -13,6 +13,9 @@ service CatalogService {
             date;
 
     entity PlayerSeasons as select from db.PlayerSeasons;
-    //action calculateCondition(to : String) returns String;
+    entity PhisicalConditions as select from db.PhisicalConditions;
+    action calculateCondition() returns Integer;
     action sayhello(to : String) returns String;
 }
+
+    
