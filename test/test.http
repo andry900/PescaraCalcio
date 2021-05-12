@@ -36,8 +36,3 @@ Content-Type: application/json
 ###
 POST {{server}}/catalog/calculateCondition
 Content-Type: application/json
-
-###
-GET {{server}}/catalog/PhisicalConditions(42417fe9-70a3-4025-8018-88fd8323252b)
-Content-Type: application/json
-

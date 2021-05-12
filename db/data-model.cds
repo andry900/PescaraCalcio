@@ -45,7 +45,7 @@ entity PhisicalConditions : cuid {
     bpm             : Integer;
     VO2max          : Integer;
     fatigue         : Integer;
-    condition       : Integer;
+    cond       : Integer;
 }
 
 view TrainingDate as

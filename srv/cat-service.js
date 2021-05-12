@@ -23,26 +23,52 @@ module.exports = cds.service.impl(async function () {
                     result = result / phisicalCond.length;
                 }
             }
-            
+
             each[j].cond = parseInt(result);
         }
     })
-    
-    this.on('calculateCondition', async function() {
-        //SELECT su Phisical condition
+
+    this.on('calculateCondition', async function () {
         var ffResult = await SELECT.from('PhisicalConditions')
-        for(var i = 0; i< ffResult; i++){
-            var ffValue = 10;
-          await  UPDATE ('PhisicalConditions',PhisicalConditions[i].ID) .with ({
-   condition: ffValue
-})
+
+        for (var i = 0; i < ffResult.length; i++) {
+            var pressure = ffResult[i].bloodPressure.split("-");
+
+            if (pressure[0] < 70 || pressure[1] > 130) {
+                ffValue = 10
+            } else {
+                ffValue = 25
+            }
+
+            if (ffResult[i].bpm < 60) {
+                ffValue += 15
+            } else if (ffResult[i].bpm >= 60 && ffResult[i].bpm < 100) {
+                ffValue += 25
+            } else {
+                ffValue += 10
+            }
+
+            if (ffResult[i].VO2max < 80) {
+                ffValue += 10
+            } else {
+                ffValue += 25
+            }
+
+            if (ffResult[i].fatigue < 50) {
+                ffValue += 25
+            } else if (ffResult[i].fatigue >= 50 && ffResult[i].fatigue < 80) {
+                ffValue += 15
+            } else {
+                ffValue += 5
+            }
+
+            await UPDATE('PhisicalConditions', ffResult[i].ID).with({
+                cond: ffValue
+            })
         }
-        //loop sui record
-            //calcolo forma fisica
-            //Update forma fisica
+
         return 0;
     })
-
 
     this.on('sayhello', function (req) {   //le azioni vengono lanciate in POST
         return "ciao " + req.data.to;
