@@ -1,4 +1,4 @@
-namespace pesacaraCalcio.coach;
+namespace pescaraCalcio.coach;
 
 using {cuid} from '@sap/cds/common';
 
@@ -36,6 +36,7 @@ entity PlayerSeasons : cuid {
     yellowCard   : Integer;
     redCard      : Integer;
     playedMinute : Integer;
+    year         : Integer
 }
 
 entity PhisicalConditions : cuid {
@@ -45,7 +46,7 @@ entity PhisicalConditions : cuid {
     bpm             : Integer;
     VO2max          : Integer;
     fatigue         : Integer;
-    cond       : Integer;
+    cond            : Integer;
 }
 
 view TrainingDate as

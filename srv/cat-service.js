@@ -17,7 +17,7 @@ module.exports = cds.service.impl(async function () {
 
                 if (phisicalCond.length > 0) {
                     for (var i = 0; i < phisicalCond.length; i++) {
-                        result += phisicalCond[i].condition;
+                        result += phisicalCond[i].cond;
                     }
 
                     result = result / phisicalCond.length;
@@ -25,6 +25,14 @@ module.exports = cds.service.impl(async function () {
             }
 
             each[j].cond = parseInt(result);
+
+            if (result < 50) {
+                each[j].progressStatus = 1;
+            } else if (result == 50) {
+                each[j].progressStatus = 0;
+            } else {
+                each[j].progressStatus = 3;
+            }
         }
     })
 

@@ -1,0 +1,202 @@
+{
+    "_version": "1.32.0",
+    "sap.cloud": {
+        "public": true,
+        "service": "pescaraCalcio.coach"
+    },
+    "sap.app": {
+        "id": "pescaraCalcio.coach.pescarafe",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "dataSources": {
+            "mainService": {
+                "uri": "/catalog/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "4.0"
+                }
+            }
+        },
+        "offline": false,
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "ui5template.fiorielements.v4.lrop",
+            "version": "1.0.0"
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "pescaraCalcio-coach-pescarafe-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "players",
+                    "action": "manager",
+                    "title": "Pescara Football manager",
+                    "subTitle": "",
+                    "icon": ""
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "resources": {
+            "js": [],
+            "css": []
+        },
+        "dependencies": {
+            "minUI5Version": "1.76.0",
+            "libs": {
+                "sap.ui.core": {},
+                "sap.fe.templates": {}
+            }
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "uri": "i18n/i18n.properties"
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            }
+        },
+        "extends": {
+            "extensions": {
+                "sap.ui.controllerExtensions": {
+                    "sap.fe.templates.ListReport.ListReportController": {
+                        "controllerName": "pescaraCalcio.coach.pescarafe.ext.controller.ListReportExt"
+                    },
+                    "sap.fe.templates.ObjectPage.ObjectPageController": {
+                        "controllerName": "pescaraCalcio.coach.pescarafe.ext.controller.ObjectPageExt"
+                    }
+                }
+            }
+        },
+        "routing": {
+            "routes": [
+                {
+                    "pattern": ":?query:",
+                    "name": "PlayersList",
+                    "target": "PlayersList"
+                },
+                {
+                    "pattern": "Players({key}):?query:",
+                    "name": "PlayersObjectPage",
+                    "target": "PlayersObjectPage"
+                },
+                {
+                    "pattern": "Players({key})/TrainingAssoc({key2}):?query:",
+                    "name": "TrainingsObjectPage",
+                    "target": "TrainingsObjectPage"
+                }
+            ],
+            "targets": {
+                "PlayersList": {
+                    "type": "Component",
+                    "id": "PlayersList",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Players",
+                            "variantManagement": "Page",
+                            "navigation": {
+                                "Players": {
+                                    "detail": {
+                                        "route": "PlayersObjectPage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "PlayersObjectPage": {
+                    "type": "Component",
+                    "id": "PlayersObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Players",
+                            "navigation": {
+                                "TrainingAssoc": {
+                                    "detail": {
+                                        "route": "TrainingsObjectPage"
+                                    }
+                                }
+                            },
+                            "content": {
+                                "body": {
+                                    "sections": {
+                                        "customSection": {
+                                            "type": "XMLFragment",
+                                            "name": "pescaraCalcio.coach.pescarafe.ext.fragment.CustomSection",
+                                            "title": "Sezione Custom",
+                                            "position": {
+                                                "placement": "After",
+                                                "anchor": "Players_ID"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "TrainingsObjectPage": {
+                    "type": "Component",
+                    "id": "TrainingsObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Trainings"
+                        }
+                    }
+                }
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        }
+    },
+    "sap.platform.abap": {
+        "_version": "1.1.0",
+        "uri": ""
+    },
+    "sap.platform.hcp": {
+        "_version": "1.1.0",
+        "uri": ""
+    },
+    "sap.fiori": {
+        "_version": "1.1.0",
+        "registrationIds": [],
+        "archeType": "transactional"
+    }
+}

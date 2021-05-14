@@ -2,57 +2,121 @@
 ## appName = PescaraCalcio
 ## language=nodejs; multiTenant=false
 ## approuter=
-_schema-version: '3.1'
+_schema-version: "3.1"
 ID: PescaraCalcio
 version: 1.0.0
 description: "A simple CAP project."
 parameters:
   enable-parallel-deployments: true
-   
+
 build-parameters:
   before-all:
-   - builder: custom
-     commands:
-      - npm install --production
-      - npx -p @sap/cds-dk cds build --production
-      
+    - builder: custom
+      commands:
+        - npm install --production
+        - npx -p @sap/cds-dk cds build --production
+
 modules:
- # --------------------- SERVER MODULE ------------------------
- - name: PescaraCalcio-srv
- # ------------------------------------------------------------
-   type: nodejs
-   path: gen/srv
-   requires:
-    # Resources extracted from CAP configuration
-    - name: PescaraCalcio-db
-   provides:
-    - name: srv-api      # required by consumers of CAP services (e.g. approuter)
-      properties:
-        srv-url: ${default-url}
+  # --------------------- SERVER MODULE ------------------------
+  - name: PescaraCalcio-srv
+    # ------------------------------------------------------------
+    type: nodejs
+    path: gen/srv
+    requires:
+      # Resources extracted from CAP configuration
+      - name: PescaraCalcio-db
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
 
- # -------------------- SIDECAR MODULE ------------------------
- - name: PescaraCalcio-db-deployer
- # ------------------------------------------------------------
-   type: hdb
-   path: gen/db  
-   parameters:
-     buildpack: nodejs_buildpack
-   requires:
-    # 'hana' and 'xsuaa' resources extracted from CAP configuration
-    - name: PescaraCalcio-db
+  # -------------------- SIDECAR MODULE ------------------------
+  - name: PescaraCalcio-db-deployer
+    # ------------------------------------------------------------
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      # 'hana' and 'xsuaa' resources extracted from CAP configuration
+      - name: PescaraCalcio-db
 
+  # -------------------- PER IL DEPLOY ------------------------
+  - name: pescaraCalcio
+
+    type: html5
+    path: app/pescarafe
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+  - name: pescaraCalcio-app-deployer
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: pescaraCalcio-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - pescaraCalcio.zip
+          name: pescaraCalcio
+          target-path: resources/
+
+  - name: pescaraCalcio-destination-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: pescaraCalcio-html5-repo-host
+        parameters:
+          service-key:
+          name: pescaraCalcio-html5-repo-host-key
+      - name: pescaraCalcio-destination
+        parameters:
+          content-target: true
+    parameters:
+      content:
+        instance:
+          destinations:
+          - Name: pescaraCalcio-destination-html5
+            ServiceInstanceName: pescaraCalcio-html5-repo-host
+            ServiceKeyName: pescaraCalcio-html5-repo-host-key
+            sap.cloud.service: pescaraCalcio.coach
+          existing_destinations_policy: update
+    build-parameters:
+      no-source: true
+
+  # ------------------------------------------------------------
 
 resources:
- # services extracted from CAP configuration
- # 'service-plan' can be configured via 'cds.requires.<name>.vcap.plan'
-# ------------------------------------------------------------
- - name: PescaraCalcio-db
-# ------------------------------------------------------------
-   type: com.sap.xs.hdi-container
-   parameters:
-     service: hanatrial  # or 'hanatrial' on trial landscapes
-     service-plan: hdi-shared
-   properties:
-     hdi-service-name: ${service-name}
+  # services extracted from CAP configuration
+  # 'service-plan' can be configured via 'cds.requires.<name>.vcap.plan'
+  # ------------------------------------------------------------
+  - name: PescaraCalcio-db
+    # ------------------------------------------------------------
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana # or 'hanatrial' on trial landscapes
+      service-plan: hdi-shared
+    properties:
+      hdi-service-name: ${service-name}
 
+  - name: pescaraCalcio-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
 
+  - name: pescaraCalcio-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+     service: destination
+     service-plan: lite
+     config:
+      HTML5Runtime_enabled: true
